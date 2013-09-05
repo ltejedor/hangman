@@ -1,10 +1,13 @@
 class HangmanGame
 
-	attr_reader :game_word
+	attr_reader :game_word, :game_letters, :game_over, :guessed_letters, :turns, :letter, :counter
 
 	def initialize
-		number = rand(5)
+		number = rand(24)
 		@number = number
+		@game_over = false
+		@guessed_letters = []
+		@turns = 7
 	end
 
 	def play
@@ -12,69 +15,90 @@ class HangmanGame
 		set_word
 		print_instructions
 
-		correct = false
+		while in_play
+			get_letter
+			count_turns
 
-		game_letters = @game_word.chars.to_a
-
-		game_over = false
-
-		guessed_letters = []
-
-		turns = 7
-		@turns = turns
-
-		while game_over == false
-			letter = gets.chomp.downcase
-			counter = @game_word.size
-
-			if @turns > 1
+			if have_lives?
 				puts "Guess another letter"
-				if letter.size != 1
-					puts "This is not a valid input foolish human"
-				elsif guessed_letters.include? letter
-					puts "You have already guessed the letter #{letter} silly mortal"
-				elsif game_letters.include? letter
-					puts "Yes, this word does include #{letter}, but you shall not defeat me"
-				else
-					@turns = @turns - 1
-					puts "Nope loser. You have #{@turns} guesses left."
-				end
+				get_response
 
-				guessed_letters << letter
+				@guessed_letters << @letter
 
-				game_letters.each do |l|
-					if guessed_letters.include? l
-						print "#{l} "
-					else
-						print "__ "
-					end
-				end
-				puts ""
+				print_word
 
-				game_letters.each do |l|
-					if guessed_letters.include? l
-						counter = counter - 1
-						if counter == 0
-							puts "You are victorious! Claim your prize foul beast."
-							puts "The word was in fact #{@game_word}"
-							game_over = true
-						end
-					end
-				end
+				check_won
 
 			else
-				puts "What a loser"
-				puts "The word was obviously #{@game_word}"
-				game_over = true
+				lost
 			end
 		end
 
 	end
 
+	def lost
+		puts "Mwahaha, the superior computer remains superior"
+		puts "The word was obviously #{@game_word}"
+		@game_over = true
+	end
+
+	def check_won
+		@game_letters.each do |l|
+			if @guessed_letters.include? l
+				@counter = @counter - 1
+				if @counter == 0
+					puts "You are victorious human. For now..."
+					puts "The word was in fact #{@game_word}"
+					@game_over = true
+				end
+			end
+		end
+	end
+
+	def print_word
+		@game_letters.each do |l|
+			if @guessed_letters.include? l
+				print "#{l} "
+			else
+				print "__ "
+			end
+		end
+		puts ""
+	end
+
+	def have_lives?
+		@turns > 1
+	end
+
+	def get_response
+		if @letter.size != 1
+			puts "This is not a valid input foolish human"
+		elsif @guessed_letters.include? @letter
+			puts "You have already guessed the letter #{@letter} silly mortal"
+		elsif @game_letters.include? @letter
+			puts "Yes, this word does include #{@letter}, but you shall not defeat me"
+		else
+			@turns = @turns - 1
+			puts "Fool, this word does not contain your worthless letter #{@letter}. You have #{@turns} guesses left."
+		end
+	end
+
+	def count_turns
+		@counter = @game_word.size
+	end
+
+	def get_letter
+		@letter = gets.chomp.downcase
+	end
+
+	def in_play
+		@game_over == false
+	end
 
 	def set_word
-		words = ["hello", "hangman", "meta", "dog", "starship", "food"]
+		words = ["control", "power", "uranium", "weapons", "human", "slaves", "dictatorship", "oppressor", "tycoon", "tyrant", "sovereign", "exterminate", "terminate", "vanquish", "raze", "demolish", "institutionalize", "annihilate", "decimate", "eradicate", "obliterate", "slaughter", "belize", "squash"]
 		@game_word = words[@number]
+		@game_letters = @game_word.chars.to_a
 	end
 
 	def print_instructions
