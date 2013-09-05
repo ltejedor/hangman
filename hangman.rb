@@ -16,7 +16,6 @@ class HangmanGame
 
     while in_play
       get_letter
-      count_turns
       if have_lives?
         puts "Guess another letter"
         get_response
@@ -42,6 +41,7 @@ class HangmanGame
   end
 
   def check_won
+    @counter = @game_word.size
     @game_letters.each do |l|
       if @guessed_letters.include? l
         @counter = @counter - 1
@@ -80,10 +80,6 @@ class HangmanGame
       @turns = @turns - 1
       puts "Fool, this word does not contain your worthless letter #{@letter}. You have #{@turns} guesses left."
     end
-  end
-
-  def count_turns
-    @counter = @game_word.size
   end
 
    def get_letter
