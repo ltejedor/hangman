@@ -36,10 +36,14 @@ class HangmanGame
 
 	end
 
+	def game_end
+		@game_over = true
+	end
+
 	def lost
 		puts "Mwahaha, the superior computer remains superior"
 		puts "The word was obviously #{@game_word}"
-		@game_over = true
+		game_end
 	end
 
 	def check_won
@@ -49,7 +53,7 @@ class HangmanGame
 				if @counter == 0
 					puts "You are victorious human. For now..."
 					puts "The word was in fact #{@game_word}"
-					@game_over = true
+					game_end
 				end
 			end
 		end
