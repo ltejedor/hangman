@@ -64,13 +64,12 @@ describe HangmanGame do
     end
   end
 
-  describe '#check_won' do
-    it 'should end game if victory conditions are met' do
+  describe '#won?' do
+    it 'should return true if victory conditions are met' do
       hangman = new_game
       hangman.play
       hangman.instance_variable_set(:@guessed_letters, hangman.instance_variable_get(:@game_letters))
-      hangman.should_receive(:game_end)
-      hangman.check_won
+      expect(hangman.won?).to eq(true)
     end
 
     it 'should continue if victory conditions are not met' do
@@ -78,7 +77,7 @@ describe HangmanGame do
       hangman.play
       hangman.instance_variable_set(:@guessed_letters, 'doesnotexist'.chars.to_a)
       hangman.should_not_receive(:game_end)
-      hangman.check_won
+      expect(hangman.won?).to eq(false)
     end
   end
 end
