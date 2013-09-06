@@ -14,6 +14,7 @@ class HangmanGame
     print_instructions
 
     while !@game_over
+    	puts self
       get_letter
       if have_lives?
         puts "Guess another letter"
@@ -21,7 +22,6 @@ class HangmanGame
 
         @guessed_letters << @letter
 
-        print_word
         check_won
       else
         lost
@@ -34,6 +34,7 @@ class HangmanGame
   end
 
   def lost
+  	puts self
     puts "Mwahaha, the superior computer remains superior"
     puts "The word was obviously #{@game_word}"
     game_end
@@ -51,17 +52,6 @@ class HangmanGame
         end
       end
     end
-  end
-
-  def print_word
-    @game_letters.each do |l|
-      if @guessed_letters.include? l
-        print "#{l} "
-      else
-        print "__ "
-      end
-    end
-    puts ""
   end
 
   def have_lives?
@@ -94,6 +84,30 @@ class HangmanGame
     puts "Guess a letter, if you dare"
     puts "__ " * @game_word.size
   end
+
+  def to_s
+    output = ""
+
+    t = @turns
+
+    ascii = <<-eos
+    _____
+    |    #{t<7 ? '|':' '}
+    |    #{t<6 ? 'O':' '}
+    |   #{t<2 ? '/':' '}#{t<5 ? '|':' '}#{t<1 ? '\\':' '}
+    |   #{t<4 ? '/':' '} #{t<3 ? '\\':' '}
+    |
+    ===
+    eos
+
+    output << ascii
+
+    @game_letters.each do |l|
+      output << (@guessed_letters.include?(l) ? l : '__') + ' '
+    end
+    output
+  end
+
 
 end
 
