@@ -3,18 +3,17 @@ class HangmanGame
   attr_reader :game_word, :game_letters, :game_over, :guessed_letters, :turns, :letter, :counter
 
   def initialize
-    number = rand(24)
-    @number = number
     @game_over = false
     @guessed_letters = []
     @turns = 7
   end
 
   def play
-    set_word
+    @game_word = random_word
+    @game_letters = @game_word.chars.to_a
     print_instructions
 
-    while in_play
+    while !@game_over
       get_letter
       if have_lives?
         puts "Guess another letter"
@@ -77,23 +76,17 @@ class HangmanGame
     elsif @game_letters.include? @letter
       puts "Yes, this word does include #{@letter}, but you shall not defeat me"
     else
-      @turns = @turns - 1
+      @turns -= 1
       puts "Fool, this word does not contain your worthless letter #{@letter}. You have #{@turns} guesses left."
     end
   end
 
-   def get_letter
+  def get_letter
     @letter = gets.chomp.downcase
   end
 
-  def in_play
-    @game_over == false
-  end
-
-  def set_word
-    words = ["control", "power", "uranium", "weapons", "human", "slaves", "dictatorship", "oppressor", "tycoon", "tyrant", "sovereign", "exterminate", "terminate", "vanquish", "raze", "demolish", "institutionalize", "annihilate", "decimate", "eradicate", "obliterate", "slaughter", "belize", "squash"]
-    @game_word = words[@number]
-    @game_letters = @game_word.chars.to_a
+  def random_word
+    ["control", "power", "uranium", "weapons", "human", "slaves", "dictatorship", "oppressor", "tycoon", "tyrant", "sovereign", "exterminate", "terminate", "vanquish", "raze", "demolish", "institutionalize", "annihilate", "decimate", "eradicate", "obliterate", "slaughter", "belize", "squash"].sample
   end
 
   def print_instructions
@@ -105,5 +98,3 @@ class HangmanGame
 end
 
 HangmanGame.new.play
-
-
