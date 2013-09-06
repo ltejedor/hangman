@@ -16,13 +16,16 @@ class HangmanGame
     while !@game_over
     	puts self
       get_letter
-      if have_lives?
-        puts "Guess another letter"
+      if have_lives? && !won?
         get_response
 
         @guessed_letters << @letter
 
-        check_won
+      elsif won?
+      	puts "#{@game_word}"
+        puts "You are victorious human. For now..."
+        puts "The word was in fact #{@game_word}"
+        game_end
       else
         lost
       end
@@ -40,18 +43,8 @@ class HangmanGame
     game_end
   end
 
-  def check_won
-    @counter = @game_word.size
-    @game_letters.each do |l|
-      if @guessed_letters.include? l
-        @counter = @counter - 1
-        if @counter == 0
-          puts "You are victorious human. For now..."
-          puts "The word was in fact #{@game_word}"
-          game_end
-        end
-      end
-    end
+  def won?
+    (@game_letters - @guessed_letters).length == 1
   end
 
   def have_lives?
@@ -69,6 +62,7 @@ class HangmanGame
       @turns -= 1
       puts "Fool, this word does not contain your worthless letter #{@letter}. You have #{@turns} guesses left."
     end
+    puts "Guess another letter"
   end
 
   def get_letter
@@ -82,7 +76,6 @@ class HangmanGame
   def print_instructions
     puts "Welcome to Hangman, where I, the computer, am champion of words"
     puts "Guess a letter, if you dare"
-    puts "__ " * @game_word.size
   end
 
   def to_s
