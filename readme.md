@@ -9,3 +9,7 @@ Test your skills by running
 cd hangman
 ruby hangman.rb
 ```
+
+## License
+
+http://ltej.mit-license.org/
