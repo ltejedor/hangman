@@ -20,10 +20,14 @@ class HangmanGame
     while !@game_over
       puts self
       get_letter
+
+      check_if_guessed
+
       @guessed_letters << @letter
-      
+
       if have_lives? && !won?
         get_response
+
 
       elsif won?
         puts "#{@game_word}"
@@ -55,11 +59,16 @@ class HangmanGame
     @turns > 1
   end
 
+  def check_if_guessed
+    if @guessed_letters.include? @letter
+      puts "You have already guessed the letter #{@letter} silly mortal"
+      play_loop
+    end
+  end
+
   def get_response
     if @letter.size != 1
       puts "This is not a valid input foolish human"
-    elsif @guessed_letters.include? @letter
-      puts "You have already guessed the letter #{@letter} silly mortal"
     elsif @game_letters.include? @letter
       puts "Yes, this word does include #{@letter}, but you shall not defeat me"
     else
