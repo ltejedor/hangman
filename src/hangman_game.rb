@@ -21,7 +21,7 @@ class HangmanGame
       puts self
       get_letter
 
-      check_if_guessed
+      already_guessed?
 
       @guessed_letters << @letter
 
@@ -59,7 +59,7 @@ class HangmanGame
     @turns > 1
   end
 
-  def check_if_guessed
+  def already_guessed?
     if @guessed_letters.include? @letter
       puts "You have already guessed the letter #{@letter} silly mortal"
       play_loop
